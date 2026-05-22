@@ -7,6 +7,10 @@
 # include <termios.h>
 # include <unistd.h>
 
+/*** defines ***/
+
+# define CTRL_KEY(k) ((k) & 0x1f)
+
 /*** data ***/
 struct termios orig_termios;
 
@@ -32,7 +36,6 @@ void enableRawMode() {
     raw.c_oflag &= ~(OPOST);    // 
     raw.c_cflag |= (CS8);
     raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);     // input falg, not ECHO, turn off line buffering
-                                                        // 
     raw.c_cc[VMIN] = 0;
     raw.c_cc[VTIME] = 1;
 
@@ -54,7 +57,7 @@ int main() {
             printf("%d ('%c')\r\n", c, c);    // %d decimal number(ASCII) %c direct
                                                 // \r at the left side
         }
-        if (c == 'q') break;
+        if (c == CTRL_KEY('q')) break;
     }
     return 0;
 }
